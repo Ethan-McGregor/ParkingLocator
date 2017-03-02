@@ -1,4 +1,7 @@
 <resources>
-    <string name="app_name">ParkingLocator</string>
+    <string name="app_name">Parking Locator</string>
     <string name="title_activity_map">MapActivity</string>
+    <string name="tab_park">Park</string>
+    <string name="tab_find">Find Car</string>
+    <string name="tab_saved">Saved Locations</string>
 </resources>

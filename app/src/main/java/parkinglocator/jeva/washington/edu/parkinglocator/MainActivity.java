@@ -20,9 +20,9 @@ public class MainActivity extends AppCompatActivity {
 
         // initializing the tablayout
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        tabLayout.addTab(tabLayout.newTab().setText("Tab1"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab2"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab3"));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_park)));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_find)));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_saved)));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         viewPager = (ViewPager) findViewById(R.id.pager);

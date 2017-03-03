@@ -18,5 +18,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/mapView2" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="65dp"
+            android:layout_height="94dp"
+            android:clickable="true"
+            android:layout_marginRight="51dp"
+            android:layout_marginEnd="51dp"
+            android:layout_marginBottom="52dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
 </RelativeLayout>

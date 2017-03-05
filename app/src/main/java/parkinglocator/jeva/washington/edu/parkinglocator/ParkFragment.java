@@ -6,6 +6,7 @@ import android.location.Location;
 import android.Manifest;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -76,9 +77,14 @@ public class ParkFragment extends Fragment implements OnMapReadyCallback,
         }
         mGoogleMap.getUiSettings().setZoomGesturesEnabled(true);
         mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
-        LatLng sydney = new LatLng(-34, 151);
-        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.myLocationButton);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentLocation(mLastLocation);
+            }
+        });
     }
 
     @Override
@@ -127,7 +133,7 @@ public class ParkFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onConnected(Bundle bundle) {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1000);
+        mLocationRequest.setInterval(10000);
         mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         if (ContextCompat.checkSelfPermission(getActivity(),
@@ -151,16 +157,7 @@ public class ParkFragment extends Fragment implements OnMapReadyCallback,
             mCurrLocationMarker.remove();
         }
 
-        //Place current location marker
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title(getString(R.string.map_current_position));
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-        mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
-
-        //move map camera
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,11));
+        getCurrentLocation(location);
 
         //optionally, stop location updates if only current location is needed
         if (mGoogleApiClient != null) {
@@ -237,5 +234,18 @@ public class ParkFragment extends Fragment implements OnMapReadyCallback,
             // other 'case' lines to check for other
             // permissions this app might request
         }
+    }
+
+    private void getCurrentLocation(Location location) {
+        //Place current location marker
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title(getString(R.string.map_current_position));
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
+
+        //move map camera
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
     }
 }

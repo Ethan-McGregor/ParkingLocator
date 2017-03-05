@@ -76,13 +76,14 @@ public class ParkFragment extends Fragment implements OnMapReadyCallback,
             mGoogleMap.setMyLocationEnabled(true);
         }
         mGoogleMap.getUiSettings().setZoomGesturesEnabled(true);
-        mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.myLocationButton);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getCurrentLocation(mLastLocation);
+                if (mLastLocation != null)
+                    getCurrentLocation(mLastLocation);
             }
         });
     }

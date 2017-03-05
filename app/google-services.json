@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "293978701274",
+    "firebase_url": "https://parkinglocator-b20ca.firebaseio.com",
+    "project_id": "parkinglocator-b20ca",
+    "storage_bucket": "parkinglocator-b20ca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:293978701274:android:50ef6d07591658a3",
+        "android_client_info": {
+          "package_name": "parkinglocator.jeva.washington.edu.parkinglocator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "293978701274-pnotpv8dqkf56osskgf0sqfj371rrioh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAou_KJEqBsJqcW1X_VnIX8RvYvLNuGtd0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

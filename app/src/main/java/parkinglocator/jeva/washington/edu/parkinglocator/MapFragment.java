@@ -63,12 +63,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_map, container, false);
-
-        mMapView = (MapView) v.findViewById(R.id.mapView);
+        View v;
+        if (mTabNumber == 1) {
+            v = inflater.inflate(R.layout.fragment_map, container, false);
+            mMapView = (MapView) v.findViewById(R.id.mapView);
+        } else {
+            v = inflater.inflate(R.layout.fragment_map2, container, false);
+            mMapView = (MapView) v.findViewById(R.id.mapView2);
+        }
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
-
         return v;
     }
 
@@ -95,8 +99,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         }
         mGoogleMap.getUiSettings().setZoomGesturesEnabled(true);
         mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
+        FloatingActionButton fab;
 
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.myLocationButton);
+        if (mTabNumber == 1)
+            fab = (FloatingActionButton) getActivity().findViewById(R.id.myLocationButton);
+        else
+            fab = (FloatingActionButton) getActivity().findViewById(R.id.myLocationButton2);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

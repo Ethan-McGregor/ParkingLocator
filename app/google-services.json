@@ -1,27 +1,35 @@
 {
   "project_info": {
-    "project_number": "293978701274",
-    "firebase_url": "https://parkinglocator-b20ca.firebaseio.com",
-    "project_id": "parkinglocator-b20ca",
-    "storage_bucket": "parkinglocator-b20ca.appspot.com"
+    "project_number": "596554384912",
+    "firebase_url": "https://parkinglocator-d38cb.firebaseio.com",
+    "project_id": "parkinglocator-d38cb",
+    "storage_bucket": "parkinglocator-d38cb.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:293978701274:android:50ef6d07591658a3",
+        "mobilesdk_app_id": "1:596554384912:android:50ef6d07591658a3",
         "android_client_info": {
           "package_name": "parkinglocator.jeva.washington.edu.parkinglocator"
         }
       },
       "oauth_client": [
         {
-          "client_id": "293978701274-pnotpv8dqkf56osskgf0sqfj371rrioh.apps.googleusercontent.com",
+          "client_id": "596554384912-g97da15vjfaqs2v6nbdnod7r7pnuokuo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "parkinglocator.jeva.washington.edu.parkinglocator",
+            "certificate_hash": "adc904a1e127530fa663c2dd1ae6be5c509d3471"
+          }
+        },
+        {
+          "client_id": "596554384912-8bkc53ah7kurite9gsnopv22qkavdk6d.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAou_KJEqBsJqcW1X_VnIX8RvYvLNuGtd0"
+          "current_key": "AIzaSyBYFZjaSXumlGoljtzmVutPoqMEdc20uNk"
         }
       ],
       "services": {
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "596554384912-8bkc53ah7kurite9gsnopv22qkavdk6d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

@@ -6,6 +6,13 @@
     tools:context="parkinglocator.jeva.washington.edu.parkinglocator.InfoFragment">
 
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -34,8 +41,7 @@
             android:background="#c39797"
             android:ems="10"
             android:inputType="textPersonName"
-            android:padding="40dp"
-            android:text="Name" />
+            android:padding="40dp" />
 
         <TextView
             android:id="@+id/textView2"
@@ -57,8 +63,7 @@
             android:background="#c39797"
             android:ems="10"
             android:inputType="textPersonName"
-            android:padding="40dp"
-            android:text="Name" />
+            android:padding="40dp" />
 
         <TextView
             android:id="@+id/textView3"
@@ -80,8 +85,7 @@
             android:background="#c39797"
             android:ems="10"
             android:inputType="textPersonName"
-            android:padding="40dp"
-            android:text="Name" />
+            android:padding="40dp" />
 
         <TextView
             android:id="@+id/textView4"
@@ -103,14 +107,13 @@
             android:background="#c39797"
             android:ems="10"
             android:inputType="textPersonName"
-            android:padding="40dp"
-            android:text="Name" />
+            android:padding="40dp" />
 
         <TextView
             android:id="@+id/textView6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="150dp"
+            android:layout_marginLeft="100dp"
             android:layout_marginTop="50dp"
             android:text="Store Car Info!"
             android:textSize="30sp" />
@@ -124,4 +127,5 @@
             android:padding="50dp"
             android:text="Submit" />
     </LinearLayout>
+    </ScrollView>
     </RelativeLayout>

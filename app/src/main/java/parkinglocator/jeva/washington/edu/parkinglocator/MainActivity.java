@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_park)));
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_find)));
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_saved)));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.car_info)));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         viewPager = (ViewPager) findViewById(R.id.pager);

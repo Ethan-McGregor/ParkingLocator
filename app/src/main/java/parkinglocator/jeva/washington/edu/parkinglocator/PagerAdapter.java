@@ -28,6 +28,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 2:
                 SavedLocationsFragment tab3 = new SavedLocationsFragment();
                 return tab3;
+            case 3:
+                InfoFragment tab4 = new InfoFragment();
+                return tab4;
             default:
                 return null;
         }

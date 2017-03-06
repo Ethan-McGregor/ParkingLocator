@@ -18,10 +18,12 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         //Returning the current tabs
         switch (position) {
             case 0:
-                ParkFragment tab1 = new ParkFragment();
+                // tab one: parking
+                MapFragment tab1 = MapFragment.newInstance(1);
                 return tab1;
             case 1:
-                FindCarFragment tab2 = new FindCarFragment();
+                // tab two: finding
+                MapFragment tab2 = MapFragment.newInstance(2);
                 return tab2;
             case 2:
                 SavedLocationsFragment tab3 = new SavedLocationsFragment();

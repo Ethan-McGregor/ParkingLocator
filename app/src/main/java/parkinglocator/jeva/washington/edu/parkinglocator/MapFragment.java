@@ -35,7 +35,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
+
     public static final String TAG = "MapFragment";
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private int mTabNumber;
     private MapView mMapView;
     private GoogleMap mGoogleMap;
@@ -46,11 +48,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     public static MapFragment newInstance(int num) {
         MapFragment f = new MapFragment();
-
         Bundle args = new Bundle();
         args.putInt("num", num);
         f.setArguments(args);
-
         return f;
     }
 
@@ -109,8 +109,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mLastLocation != null)
-                    getCurrentLocation(mLastLocation);
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(getString(R.string.dialog_mark_location_title))
+                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface di, int i) {
+                                if (mLastLocation != null)
+                                    markCurrentLocation(new LatLng(mLastLocation.getLatitude(),
+                                            mLastLocation.getLongitude()));
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .create()
+                        .show();
             }
         });
     }
@@ -181,27 +192,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     public void onLocationChanged(Location location)
     {
         mLastLocation = location;
-        if (mCurrLocationMarker != null) {
-            mCurrLocationMarker.remove();
-        }
-        getCurrentLocation(location);
-        //optionally, stop location updates if only current location is needed
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        // move map camera
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
+        // optionally, stop location updates if only current location is needed
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
     }
 
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
                 new AlertDialog.Builder(getActivity())
-                        .setTitle("Location Permission Needed")
-                        .setMessage("This app needs the Location permission, please accept to use location functionality")
+                        .setTitle(getString(R.string.dialog_permission_location_title))
+                        .setMessage(getString(R.string.dialog_permission_location_body))
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -213,8 +221,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                         })
                         .create()
                         .show();
-
-
             } else {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(getActivity(),
@@ -240,7 +246,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                         }
                         mGoogleMap.setMyLocationEnabled(true);
                     }
-
                 } else {
                     Toast.makeText(getActivity(), "Permission denied", Toast.LENGTH_LONG).show();
                 }
@@ -248,16 +253,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private void getCurrentLocation(Location location) {
+    private void markCurrentLocation(LatLng latLng) {
         // place current location marker
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        if (mCurrLocationMarker != null) {
+            mCurrLocationMarker.remove();
+        }
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title(getString(R.string.map_current_position));
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
         mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
-
-        // move map camera
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
     }
 }

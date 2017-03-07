@@ -6,6 +6,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -23,6 +24,9 @@ public class ParkActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.parkToolbar);
         setSupportActionBar(toolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setHomeAsUpIndicator(R.drawable.ic_action_cancel);
+        ab.setDisplayHomeAsUpEnabled(true);
 
         Button btn = (Button) findViewById(R.id.btn_park);
         btn.setOnClickListener(new View.OnClickListener() {

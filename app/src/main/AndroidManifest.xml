@@ -44,7 +44,11 @@
         <activity
             android:name=".ParkActivity"
             android:label="@string/title_activity_park"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="parkinglocator.jeva.washington.edu.parkinglocator.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

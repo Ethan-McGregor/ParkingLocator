@@ -62,8 +62,17 @@ public class InfoFragment extends Fragment {
 
                 cars = new ArrayList<Map<String, String>>();
 
-                cars = td.get(id);
 
+
+                if (td.get(id) != null){
+                    cars = td.get(id);
+                }else{
+                    lan = "000000";
+                    lon = "000000";
+                    details= "NO details to show";
+
+
+                }
                 //Go through each map in list.
                 //get all the
 

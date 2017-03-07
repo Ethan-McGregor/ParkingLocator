@@ -4,10 +4,13 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.storage.FirebaseStorage;
@@ -15,11 +18,12 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private TabLayout tabLayout;
     private ViewPager mPager;
     private PagerAdapter mAdapter;
     private StorageReference mStorageRef;
+    private int mCurrentTab;
     public static final String TAG = "MainActivity";
     public static final int LOCATION_REQUEST = 1;
 
@@ -46,7 +50,10 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                mPager.setCurrentItem(tab.getPosition());
+                int i = tab.getPosition();
+                mPager.setCurrentItem(i);
+                mCurrentTab = i;
+                Log.i(TAG, "current tab: " + mCurrentTab);
             }
 
             @Override
@@ -59,6 +66,21 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        FloatingActionButton fabPark = (FloatingActionButton) findViewById(R.id.myLocationButton);
+        fabPark.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (mCurrentTab == 0) {
+            MapFragment mFragment = (MapFragment) mAdapter.getRegisteredFragment(0);
+            startActivityForResult(new Intent()
+                            .setClass(getApplicationContext(), ParkActivity.class)
+                            .putExtra("location", mFragment.getCurrentLocation()),
+                    MainActivity.LOCATION_REQUEST
+            );
+        }
     }
 
     @Override

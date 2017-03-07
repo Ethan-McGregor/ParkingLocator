@@ -79,18 +79,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         }
         mGoogleMap.getUiSettings().setZoomGesturesEnabled(true);
         mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
-
-        FloatingActionButton fabPark = (FloatingActionButton) getActivity().findViewById(R.id.myLocationButton);
-        fabPark.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().startActivityForResult(new Intent()
-                        .setClass(getActivity(), ParkActivity.class)
-                        .putExtra("location", mLastLocation),
-                        MainActivity.LOCATION_REQUEST
-                );
-            }
-        });
     }
 
     @Override
@@ -218,6 +206,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                 }
             }
         }
+    }
+
+    public Location getCurrentLocation() {
+        return mLastLocation;
     }
 
     public void markCurrentLocation(Context context, LatLng latLng) {

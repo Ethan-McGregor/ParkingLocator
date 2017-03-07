@@ -50,7 +50,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="parkinglocator.jeva.washington.edu.parkinglocator.MainActivity" />
         </activity>
-        <activity android:name=".FindActivity"></activity>
+        <activity android:name=".FindActivity" />
     </application>
 
 </manifest>

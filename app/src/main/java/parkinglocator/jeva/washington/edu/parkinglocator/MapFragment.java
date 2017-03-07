@@ -1,6 +1,7 @@
 package parkinglocator.jeva.washington.edu.parkinglocator;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.Manifest;
@@ -109,19 +110,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(getActivity())
+                /*new AlertDialog.Builder(getActivity())
                         .setTitle(getString(R.string.dialog_mark_location_title))
                         .setPositiveButton("yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface di, int i) {
-                                if (mLastLocation != null)
-                                    markCurrentLocation(new LatLng(mLastLocation.getLatitude(),
-                                            mLastLocation.getLongitude()));
+
                             }
                         })
                         .setNegativeButton("No", null)
                         .create()
-                        .show();
+                        .show();*/
+                startActivityForResult(new Intent()
+                        .setClass(getActivity(), ParkActivity.class)
+                        .putExtra(MainActivity.EXTRA_LOCATION, mLastLocation),
+                        MainActivity.LOCATION_REQUEST
+                );
             }
         });
     }
@@ -253,7 +257,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private void markCurrentLocation(LatLng latLng) {
+    public LatLng getCurrentLocation() {
+        return new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+    }
+
+    public void markCurrentLocation(LatLng latLng) {
         // place current location marker
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();

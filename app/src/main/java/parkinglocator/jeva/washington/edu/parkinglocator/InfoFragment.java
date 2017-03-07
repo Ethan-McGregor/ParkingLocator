@@ -55,7 +55,7 @@ public class InfoFragment extends Fragment {
 
                 DatabaseReference refColor = userDatabase.getReference("color");
                 refColor.setValue(color.getText().toString());
-                    refColor.
+                   
             }
         };
 

@@ -3,9 +3,11 @@ package parkinglocator.jeva.washington.edu.parkinglocator;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.SparseArray;
 import android.view.ViewGroup;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
+    SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
     int tabCount;
 
     public PagerAdapter(FragmentManager fm, int tabCount) {

@@ -20,8 +20,8 @@ public class FindActivity extends AppCompatActivity {
         setContentView(R.layout.activity_find);
 
         Intent intent = getIntent();
-        lan = intent.getIntExtra("lan", 0);
-        lon = intent.getIntExtra("lon", 0);
+        lan = Integer.parseInt(intent.getStringExtra("lan"));
+        lon = Integer.parseInt(intent.getStringExtra("lon"));
         details = intent.getStringExtra("details");
         Log.i(MainActivity.TAG, "" + lan + " " + lon + " " + details);
 

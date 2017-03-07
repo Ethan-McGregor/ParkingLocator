@@ -71,15 +71,15 @@ public class ParkActivity extends AppCompatActivity {
     public static void writeUserData(String userId, int car, String make, String model, String year,
                                      String color, String details, double lat, double lon){
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference user = database.getReference("user");
+        DatabaseReference user = database.getReference(userId);
 
-        user.child("users").child(userId).child("" +car).child("make").setValue(make);
-        user.child("users").child(userId).child("" +car).child("model").setValue(model);
-        user.child("users").child(userId).child("" +car).child("year").setValue(year);
-        user.child("users").child(userId).child("" +car).child("color").setValue(color);
-        user.child("users").child(userId).child("" +car).child("details").setValue(details);
-        user.child("users").child(userId).child("" +car).child("lat").setValue("" + lat);
-        user.child("users").child(userId).child("" +car).child("lon").setValue("" + lon);
+        user.child("" +car).child("make").setValue(make);
+        user.child("" +car).child("model").setValue(model);
+        user.child("" +car).child("year").setValue(year);
+        user.child("" +car).child("color").setValue(color);
+        user.child("" +car).child("details").setValue(details);
+        user.child("" +car).child("lat").setValue("" + lat);
+        user.child("" +car).child("lon").setValue("" + lon);
 
     }
 

@@ -26,8 +26,8 @@ public class ParkActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_park);
 
-        mLocation = getIntent().getExtras().getParcelable(MainActivity.EXTRA_LOCATION);
-        carCount = getIntent().getExtras().getInt("Count");
+        carCount = getIntent().getExtras().getInt("count");
+        mLocation = getIntent().getExtras().getParcelable("location");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.parkToolbar);
         setSupportActionBar(toolbar);
@@ -59,9 +59,10 @@ public class ParkActivity extends AppCompatActivity {
                         model.getText().toString(),year.getText().toString(),color.getText().toString(),
                         details.getText().toString(), lat, lon);
 
-                Toast.makeText(v.getContext(),"Car Information Submitted and Saved!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(),"Car information submitted and saved!", Toast.LENGTH_SHORT).show();
 
                 Intent returnIntent = getIntent();
+                returnIntent.putExtra("location", mLocation);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }

@@ -7,7 +7,7 @@ import android.util.SparseArray;
 import android.view.ViewGroup;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
-    SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
+    SparseArray<Fragment> registeredFragments = new SparseArray<>();
     int tabCount;
 
     public PagerAdapter(FragmentManager fm, int tabCount) {
@@ -35,7 +35,6 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return tabCount;
     }
-
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {

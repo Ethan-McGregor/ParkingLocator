@@ -8,11 +8,11 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,12 +39,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private MapView mMapView;
-    private static GoogleMap mGoogleMap;
+    private GoogleMap mGoogleMap;
     private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
-    private static Marker mCurrLocationMarker;
     private int carCount = 0;
+    private Marker mCurrLocationMarker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,6 +52,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         mMapView = (MapView) v.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
+        Log.i(MainActivity.TAG, "onCreateView");
         return v;
     }
 
@@ -78,19 +79,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         }
         mGoogleMap.getUiSettings().setZoomGesturesEnabled(true);
         mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
-
-        FloatingActionButton fabPark = (FloatingActionButton) getActivity().findViewById(R.id.myLocationButton);
-        fabPark.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().startActivityForResult(new Intent()
-                        .setClass(getActivity(), ParkActivity.class)
-                        .putExtra(MainActivity.EXTRA_LOCATION, mLastLocation)
-                        .putExtra("Count", carCount++),
-                        MainActivity.LOCATION_REQUEST
-                );
-            }
-        });
+        mGoogleMap.getUiSettings().setMapToolbarEnabled(false);
+        Log.i(MainActivity.TAG, "onMapReady");
     }
 
     @Override
@@ -147,6 +137,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                 == PackageManager.PERMISSION_GRANTED) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
+        Log.i(MainActivity.TAG, "onConnected");
     }
 
     @Override
@@ -220,11 +211,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    public LatLng getCurrentLocation() {
-        return new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+    public Location getCurrentLocation() {
+        return mLastLocation;
     }
 
-    public static void markCurrentLocation(Context context, LatLng latLng) {
+    public void markCurrentLocation(Context context, LatLng latLng) {
         // place current location marker
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();

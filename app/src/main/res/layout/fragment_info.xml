@@ -5,14 +5,6 @@
     android:id="@+id/fragment_info"
     tools:context="parkinglocator.jeva.washington.edu.parkinglocator.InfoFragment">
 
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,23 +20,23 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="100dp"
             android:layout_marginRight="100dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal"
             android:textAlignment="center"
             android:text="Car Make"
-            android:textSize="25dp"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/editText1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:background="#c39797"
             android:ems="10"
             android:inputType="textPersonName"
-            android:padding="40dp"
+            android:padding="0dp"
             android:textSize="18dp"/>
 
         <TextView
@@ -53,17 +45,17 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="100dp"
             android:layout_marginRight="100dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal"
             android:textAlignment="center"
             android:text="Car Model"
-            android:textSize="25dp"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/editText2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_gravity="center_horizontal"
@@ -71,7 +63,7 @@
             android:background="#c39797"
             android:ems="10"
             android:inputType="textPersonName"
-            android:padding="40dp"
+            android:padding="0dp"
             android:textSize="18dp"/>
 
         <TextView
@@ -80,23 +72,23 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="100dp"
             android:layout_marginRight="100dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal"
             android:textAlignment="center"
             android:text="Color"
-            android:textSize="25dp"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/editText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:background="#c39797"
             android:ems="10"
             android:inputType="textPersonName"
-            android:padding="40dp"
+            android:padding="0dp"
             android:textSize="18dp"/>
 
         <TextView
@@ -105,47 +97,46 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="100dp"
             android:layout_marginRight="100dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal"
             android:textAlignment="center"
             android:text="Year"
-            android:textSize="25dp"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/editText4"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:background="#c39797"
             android:ems="10"
             android:inputType="textPersonName"
-            android:padding="40dp"
+            android:padding="0dp"
             android:textSize="18dp"/>
 
         <TextView
             android:id="@+id/textView6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="50dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="10dp"
+            android:text="Store Car Information"
             android:textAlignment="center"
-            android:text="Store Car Info!"
             android:textSize="30sp" />
 
         <Button
             android:id="@+id/button2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="96dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:padding="50dp"
+            android:padding="30dp"
             android:text="Submit"
             android:textSize="32dp"
             android:background="@drawable/button_rounded"
-            android:layout_marginBottom="50dp"/>
+            android:layout_marginBottom="30dp"/>
     </LinearLayout>
-    </ScrollView>
     </RelativeLayout>

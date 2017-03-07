@@ -28,7 +28,7 @@ public class ParkActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent returnIntent = new Intent();
+                Intent returnIntent = getIntent();
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }

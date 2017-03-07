@@ -27,7 +27,7 @@ public class ParkActivity extends AppCompatActivity {
         setContentView(R.layout.activity_park);
 
         mLocation = getIntent().getExtras().getParcelable(MainActivity.EXTRA_LOCATION);
-
+        carCount = getIntent().getExtras().getInt("Count");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.parkToolbar);
         setSupportActionBar(toolbar);
@@ -46,9 +46,7 @@ public class ParkActivity extends AppCompatActivity {
                 EditText details = (EditText) v.getRootView().findViewById(R.id.input_details);
                 double lat = mLocation.getLatitude();
                 double lon = mLocation.getLongitude();
-
-                carCount++;
-
+                
                 String id;
                 try {
                     id = getDeviceId(v.getContext());

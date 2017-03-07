@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context="parkinglocator.jeva.washington.edu.parkinglocator.ParkActivity">
 
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/parkToolbar"
         android:layout_width="match_parent"
@@ -15,6 +16,9 @@
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <LinearLayout
         android:orientation="vertical"
@@ -108,5 +112,5 @@
             android:padding="12dp"
             android:text="@string/button_park"/>
     </LinearLayout>
-
+    </ScrollView>
 </LinearLayout>

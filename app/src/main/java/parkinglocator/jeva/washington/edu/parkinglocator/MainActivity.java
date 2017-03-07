@@ -1,5 +1,6 @@
 package parkinglocator.jeva.washington.edu.parkinglocator;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -9,6 +10,8 @@ import android.support.v7.widget.Toolbar;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
@@ -65,8 +68,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == LOCATION_REQUEST) {
             // make sure the request was successful
             if (resultCode == RESULT_OK) {
-                MapFragment fragment = (MapFragment) getSupportFragmentManager().findFragmentByTag(
-                        "android:switcher:"+R.id.pager+":0");
+                MapFragment fragment = (MapFragment) mAdapter.getRegisteredFragment(0);
                 fragment.markCurrentLocation(this, fragment.getCurrentLocation());
             }
         }

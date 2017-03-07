@@ -1,5 +1,7 @@
 package parkinglocator.jeva.washington.edu.parkinglocator;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -37,41 +39,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
-    public static final String TAG = "MapFragment";
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    private int mTabNumber;
     private MapView mMapView;
-    private GoogleMap mGoogleMap;
+    private static GoogleMap mGoogleMap;
     private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
-    private Marker mCurrLocationMarker;
-
-    public static MapFragment newInstance(int num) {
-        MapFragment f = new MapFragment();
-        Bundle args = new Bundle();
-        args.putInt("num", num);
-        f.setArguments(args);
-        return f;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mTabNumber = getArguments() != null ? getArguments().getInt("num") : 1;
-        Log.i(TAG, "tab number: " + mTabNumber);
-    }
+    private static Marker mCurrLocationMarker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v;
-        if (mTabNumber == 1) {
-            v = inflater.inflate(R.layout.fragment_map, container, false);
-            mMapView = (MapView) v.findViewById(R.id.mapView);
-        } else {
-            v = inflater.inflate(R.layout.fragment_map2, container, false);
-            mMapView = (MapView) v.findViewById(R.id.mapView2);
-        }
+        View v = inflater.inflate(R.layout.fragment_map, container, false);
+        mMapView = (MapView) v.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
         return v;
@@ -100,27 +79,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         }
         mGoogleMap.getUiSettings().setZoomGesturesEnabled(true);
         mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
-        FloatingActionButton fab;
 
-        if (mTabNumber == 1)
-            fab = (FloatingActionButton) getActivity().findViewById(R.id.myLocationButton);
-        else
-            fab = (FloatingActionButton) getActivity().findViewById(R.id.myLocationButton2);
-
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fabPark = (FloatingActionButton) getActivity().findViewById(R.id.myLocationButton);
+        fabPark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*new AlertDialog.Builder(getActivity())
-                        .setTitle(getString(R.string.dialog_mark_location_title))
-                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface di, int i) {
-
-                            }
-                        })
-                        .setNegativeButton("No", null)
-                        .create()
-                        .show();*/
                 getActivity().startActivityForResult(new Intent()
                         .setClass(getActivity(), ParkActivity.class)
                         .putExtra(MainActivity.EXTRA_LOCATION, mLastLocation),
@@ -261,14 +224,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         return new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
     }
 
-    public void markCurrentLocation(LatLng latLng) {
+    public static void markCurrentLocation(Context context, LatLng latLng) {
         // place current location marker
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();
         }
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        markerOptions.title(getString(R.string.map_current_position));
+        markerOptions.title(context.getString(R.string.map_current_position));
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
         mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
     }

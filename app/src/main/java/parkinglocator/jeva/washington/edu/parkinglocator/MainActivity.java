@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mPager;
     private PagerAdapter mAdapter;
     private StorageReference mStorageRef;
+    public static final String TAG = "MainActivity";
     public static final String EXTRA_LOCATION = "edu.washington.gjdevera.quizdroid.LOCATION";
     public static final int LOCATION_REQUEST = 1;
 
@@ -31,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
         // initializing the tablayout
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_park)));
-        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_find)));
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_saved)));
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.car_info)));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 MapFragment fragment = (MapFragment) getSupportFragmentManager().findFragmentByTag(
                         "android:switcher:"+R.id.pager+":0");
-                fragment.markCurrentLocation(fragment.getCurrentLocation());
+                fragment.markCurrentLocation(this, fragment.getCurrentLocation());
             }
         }
     }

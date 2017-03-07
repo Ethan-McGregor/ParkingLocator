@@ -1,12 +1,11 @@
 package parkinglocator.jeva.washington.edu.parkinglocator;
 
-import android.app.Activity;
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.Manifest;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,7 +13,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +44,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private static Marker mCurrLocationMarker;
+    private int carCount = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,7 +85,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             public void onClick(View v) {
                 getActivity().startActivityForResult(new Intent()
                         .setClass(getActivity(), ParkActivity.class)
-                        .putExtra(MainActivity.EXTRA_LOCATION, mLastLocation),
+                        .putExtra(MainActivity.EXTRA_LOCATION, mLastLocation)
+                        .putExtra("Count", carCount++),
                         MainActivity.LOCATION_REQUEST
                 );
             }

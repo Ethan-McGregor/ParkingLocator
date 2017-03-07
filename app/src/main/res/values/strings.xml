@@ -14,4 +14,7 @@
     <string name="dialog_permission_location_body">This app needs the Location permission,
         please accept to use location functionality</string>
     <string name="dialog_mark_location_title">Park your car here?</string>
+
+    <string name="title_activity_park">ParkActivity</string>
+    <string name="button_park">Park</string>
 </resources>

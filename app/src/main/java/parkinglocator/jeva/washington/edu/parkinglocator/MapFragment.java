@@ -9,7 +9,6 @@ import android.location.Location;
 import android.Manifest;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -48,11 +47,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     private Marker mCurrLocationMarker;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.i(MainActivity.TAG, "onCreate");
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_map, container, false);
         mMapView = (MapView) v.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
+        Log.i(MainActivity.TAG, "onCreateView");
         return v;
     }
 
@@ -79,6 +85,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         }
         mGoogleMap.getUiSettings().setZoomGesturesEnabled(true);
         mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
+        mGoogleMap.getUiSettings().setMapToolbarEnabled(false);
+        Log.i(MainActivity.TAG, "onMapReady");
     }
 
     @Override
@@ -135,6 +143,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                 == PackageManager.PERMISSION_GRANTED) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
+        Log.i(MainActivity.TAG, "onConnected");
     }
 
     @Override

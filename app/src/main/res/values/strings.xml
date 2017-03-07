@@ -1,11 +1,9 @@
 <resources>
     <string name="app_name">Parking Locator</string>
-    <string name="title_activity_map">MapActivity</string>
     <string name="tab_park">Park</string>
     <string name="tab_saved">Saved Locations</string>
     <string name="car_info">Car Info</string>
 
-    <string name="title_activity_maps">Map</string>
     <string name="map_current_position">Current Position</string>
 
     <string name="dialog_permission_location_title">Location Permission Needed</string>
@@ -14,13 +12,12 @@
 
     <string name="title_activity_park">Park</string>
     <string name="button_park">Park</string>
-
     <string name="subhead_car_details">Car Details</string>
     <string name="car_make">Manufacturer</string>
     <string name="car_model">Model</string>
     <string name="car_color">Color</string>
     <string name="car_year">Year</string>
-
     <string name="parking_details">Parking Details</string>
-    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="title_activity_find">Find Your Car</string>
 </resources>

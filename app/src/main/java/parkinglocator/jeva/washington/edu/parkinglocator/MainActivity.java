@@ -73,13 +73,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if (mCurrentTab == 0) {
-            MapFragment mFragment = (MapFragment) mAdapter.getRegisteredFragment(0);
-            startActivityForResult(new Intent()
-                            .setClass(getApplicationContext(), ParkActivity.class)
-                            .putExtra("location", mFragment.getCurrentLocation()),
+        switch (mCurrentTab) {
+            case 0:
+                MapFragment mFragment = (MapFragment) mAdapter.getRegisteredFragment(0);
+                startActivityForResult(new Intent()
+                    .setClass(getApplicationContext(), ParkActivity.class)
+                    .putExtra("location", mFragment.getCurrentLocation()),
                     MainActivity.LOCATION_REQUEST
-            );
+                );
+                break;
+            case 2:
+                startActivity(new Intent()
+                .setClass(getApplicationContext(), FindActivity.class));
+                break;
         }
     }
 

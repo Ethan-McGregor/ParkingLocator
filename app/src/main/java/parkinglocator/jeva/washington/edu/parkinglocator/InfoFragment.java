@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -20,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 public class InfoFragment extends Fragment {
     private CarObject car;
+    private int carCount = 0;
 
     public InfoFragment() {
         // Required empty public constructor
@@ -40,7 +42,10 @@ public class InfoFragment extends Fragment {
                 EditText model = (EditText) v.getRootView().findViewById(R.id.editText2);
                 EditText year = (EditText)v.getRootView().findViewById(R.id.editText4);
                 EditText color = (EditText) v.getRootView().findViewById(R.id.editText);
-                String id;
+
+                carCount++;
+
+              String id;
                 try {
                    id = getDeviceId(v.getContext());
                 }
@@ -48,7 +53,14 @@ public class InfoFragment extends Fragment {
                     id = "Emulator";
 
                     }
-                writeUserData(id,make.getText().toString(),model.getText().toString(),year.getText().toString(),color.getText().toString());
+                writeUserData(getDeviceId(v.getContext()), carCount, make.getText().toString(),model.getText().toString(),year.getText().toString(),color.getText().toString());
+                
+              Toast.makeText(v.getContext(),"Car Information Submitted and Saved!", Toast.LENGTH_SHORT).show();
+
+                make.setText("");
+                model.setText("");
+                year.setText("");
+                color.setText("");
             }
         };
 
@@ -58,13 +70,15 @@ public class InfoFragment extends Fragment {
         return view;
     }
 
-    public static void writeUserData(String userId, String make, String model, String year, String color){
+    public static void writeUserData(String userId, int car, String make, String model, String year, String color){
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference user = database.getReference("user");
-        user.child("users").child(userId).child("make").setValue(make);
-        user.child("users").child(userId).child("model").setValue(model);
-        user.child("users").child(userId).child("year").setValue(year);
-        user.child("users").child(userId).child("color").setValue(color);
+
+        user.child("users").child(userId).child("" +car).child("make").setValue(make);
+        user.child("users").child(userId).child("" +car).child("model").setValue(model);
+        user.child("users").child(userId).child("" +car).child("year").setValue(year);
+        user.child("users").child(userId).child("" +car).child("color").setValue(color);
+
     }
 
     public String getDeviceId(Context context){

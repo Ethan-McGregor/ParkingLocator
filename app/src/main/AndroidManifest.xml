@@ -8,8 +8,6 @@
     <uses-permission android:name="com.yourpackagename.permission.MAPS_RECEIVE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
-
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true"/>

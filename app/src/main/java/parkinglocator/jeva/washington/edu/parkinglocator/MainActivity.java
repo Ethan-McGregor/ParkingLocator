@@ -15,8 +15,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.Map;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private TabLayout tabLayout;
     private ViewPager mPager;
@@ -99,8 +97,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 MapFragment fragment = (MapFragment) mAdapter.getRegisteredFragment(0);
                 Location location = data.getExtras().getParcelable("location");
+                double lat;
+                double lon;
+                try{
+                    lat = location.getLatitude();
+                    lon = location.getLongitude();
+                }
+                catch(java.lang.NullPointerException e){
+                    lat = 0.0;
+                    lon = 0.0;
+                }
                 fragment.markCurrentLocation(this,
-                        new LatLng(location.getLatitude(),location.getLongitude()));
+                        new LatLng(lat,lon));
             }
         }
     }

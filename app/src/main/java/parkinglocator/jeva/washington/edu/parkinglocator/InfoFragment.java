@@ -1,8 +1,10 @@
 package parkinglocator.jeva.washington.edu.parkinglocator;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +31,7 @@ public class InfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_info, container, false);
 
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
         Button submit = (Button) view.findViewById(R.id.button2);
 
         View.OnClickListener buttonListener = new View.OnClickListener() {
@@ -40,22 +42,25 @@ public class InfoFragment extends Fragment {
                 EditText color = (EditText) v.getRootView().findViewById(R.id.editText);
 
 
-                DatabaseReference user = database.getReference("user");
-                user.setValue("User1!");
-                FirebaseDatabase userDatabase = user.getDatabase();
+//                DatabaseReference user = database.getReference("user");
+//                user.setValue("User1!");
+//                FirebaseDatabase userDatabase = user.getDatabase();
+//
+//                DatabaseReference userMake = userDatabase.getReference("make");
+//                userMake.setValue( make.getText().toString());
+//
+//                DatabaseReference refModel = userDatabase.getReference("model");
+//                refModel.setValue( model.getText().toString());
+//
+//                DatabaseReference refYear = userDatabase.getReference("year");
+//                refYear.setValue( year.getText().toString());
+//
+//                DatabaseReference refColor = userDatabase.getReference("color");
+//                refColor.setValue(color.getText().toString());
+//                String id = android.telephony.TelephonyManager.getDeviceId();
+                writeUserData(getDeviceId(v.getContext()),make.getText().toString(),model.getText().toString(),year.getText().toString(),color.getText().toString());
 
-                DatabaseReference userMake = userDatabase.getReference("make");
-                userMake.setValue( make.getText().toString());
 
-                DatabaseReference refModel = userDatabase.getReference("model");
-                refModel.setValue( model.getText().toString());
-
-                DatabaseReference refYear = userDatabase.getReference("year");
-                refYear.setValue( year.getText().toString());
-
-                DatabaseReference refColor = userDatabase.getReference("color");
-                refColor.setValue(color.getText().toString());
-                   
             }
         };
 
@@ -63,6 +68,20 @@ public class InfoFragment extends Fragment {
         view.findViewById(R.id.button2).setOnClickListener(buttonListener);
         // Inflate the layout for this fragment
         return view;
+    }
+
+    public static void writeUserData(String userId, String make, String model, String year, String color){
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference user = database.getReference("user");
+
+        user.child("users").child(userId).child("make").setValue(make);
+        user.child("users").child(userId).child("model").setValue(model);
+        user.child("users").child(userId).child("year").setValue(year);
+        user.child("users").child(userId).child("color").setValue(color);
+    }
+    public String getDeviceId(Context context){
+        TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        return telephonyManager.getDeviceId();
     }
 
 }

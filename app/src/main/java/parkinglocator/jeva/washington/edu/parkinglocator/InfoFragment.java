@@ -8,20 +8,23 @@ import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class InfoFragment extends Fragment {
-    private CarObject car;
-    private int carCount = 0;
+    private  ArrayList<String> cars;
+
 
     public InfoFragment() {
         // Required empty public constructor
@@ -29,61 +32,53 @@ public class InfoFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_info, container, false);
+        final View view = inflater.inflate(R.layout.fragment_info, container, false);
 
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        cars = new ArrayList<String>();
 
-        Button submit = (Button) view.findViewById(R.id.button2);
-
-        View.OnClickListener buttonListener = new View.OnClickListener() {
-            public void onClick(View v) {
-                EditText make = (EditText) v.getRootView().findViewById(R.id.editText1);
-                EditText model = (EditText) v.getRootView().findViewById(R.id.editText2);
-                EditText year = (EditText)v.getRootView().findViewById(R.id.editText4);
-                EditText color = (EditText) v.getRootView().findViewById(R.id.editText);
-
-                carCount++;
-
-              String id;
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String id;
                 try {
-                   id = getDeviceId(v.getContext());
+                    id = getDeviceId(view.getContext());
                 }
                 catch(java.lang.SecurityException e){
                     id = "Emulator";
 
-                    }
-                writeUserData(getDeviceId(v.getContext()), carCount, make.getText().toString(),model.getText().toString(),year.getText().toString(),color.getText().toString());
-                
-              Toast.makeText(v.getContext(),"Car Information Submitted and Saved!", Toast.LENGTH_SHORT).show();
+                }
+                Map<String, ArrayList<String>> td = (HashMap<String,ArrayList<String>>) dataSnapshot.getValue();
 
-                make.setText("");
-                model.setText("");
-                year.setText("");
-                color.setText("");
+                cars = new ArrayList<String>();
+                cars = td.get(id);
+                //List<String> values = td.values();
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, cars);
+
+                ListView listView = (ListView) view.findViewById(R.id.list_view);
+
+                listView.setAdapter(adapter);
+
+        }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+
             }
-        };
 
 
-        view.findViewById(R.id.button2).setOnClickListener(buttonListener);
-        // Inflate the layout for this fragment
+        });
         return view;
-    }
-
-    public static void writeUserData(String userId, int car, String make, String model, String year, String color){
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference user = database.getReference("user");
-
-        user.child("users").child(userId).child("" +car).child("make").setValue(make);
-        user.child("users").child(userId).child("" +car).child("model").setValue(model);
-        user.child("users").child(userId).child("" +car).child("year").setValue(year);
-        user.child("users").child(userId).child("" +car).child("color").setValue(color);
-
     }
 
     public String getDeviceId(Context context){
         TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
         return telephonyManager.getDeviceId();
     }
+
+
 
 }

@@ -45,16 +45,22 @@ public class InfoFragment extends Fragment {
 
                 carCount++;
 
-                writeUserData(getDeviceId(v.getContext()), carCount, make.getText().toString(),model.getText().toString(),year.getText().toString(),color.getText().toString());
+              String id;
+                try {
+                   id = getDeviceId(v.getContext());
+                }
+                catch(java.lang.SecurityException e){
+                    id = "Emulator";
 
-                Toast.makeText(v.getContext(),"Car Information Submitted and Saved!", Toast.LENGTH_SHORT).show();
+                    }
+                writeUserData(getDeviceId(v.getContext()), carCount, make.getText().toString(),model.getText().toString(),year.getText().toString(),color.getText().toString());
+                
+              Toast.makeText(v.getContext(),"Car Information Submitted and Saved!", Toast.LENGTH_SHORT).show();
 
                 make.setText("");
                 model.setText("");
                 year.setText("");
                 color.setText("");
-
-
             }
         };
 
@@ -72,7 +78,9 @@ public class InfoFragment extends Fragment {
         user.child("users").child(userId).child("" +car).child("model").setValue(model);
         user.child("users").child(userId).child("" +car).child("year").setValue(year);
         user.child("users").child(userId).child("" +car).child("color").setValue(color);
+
     }
+
     public String getDeviceId(Context context){
         TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
         return telephonyManager.getDeviceId();

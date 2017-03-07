@@ -41,11 +41,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private MapView mMapView;
-    private static GoogleMap mGoogleMap;
+    private GoogleMap mGoogleMap;
     private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
-    private static Marker mCurrLocationMarker;
+    private Marker mCurrLocationMarker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,7 +86,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             public void onClick(View v) {
                 getActivity().startActivityForResult(new Intent()
                         .setClass(getActivity(), ParkActivity.class)
-                        .putExtra(MainActivity.EXTRA_LOCATION, mLastLocation),
+                        .putExtra("location", mLastLocation),
                         MainActivity.LOCATION_REQUEST
                 );
             }
@@ -220,11 +220,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    public LatLng getCurrentLocation() {
-        return new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-    }
-
-    public static void markCurrentLocation(Context context, LatLng latLng) {
+    public void markCurrentLocation(Context context, LatLng latLng) {
         // place current location marker
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();

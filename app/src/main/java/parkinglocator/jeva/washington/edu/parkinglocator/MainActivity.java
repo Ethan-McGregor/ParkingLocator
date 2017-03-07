@@ -2,12 +2,14 @@ package parkinglocator.jeva.washington.edu.parkinglocator;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -19,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
     private PagerAdapter mAdapter;
     private StorageReference mStorageRef;
     public static final String TAG = "MainActivity";
-    public static final String EXTRA_LOCATION = "edu.washington.gjdevera.quizdroid.LOCATION";
     public static final int LOCATION_REQUEST = 1;
 
     @Override
@@ -67,7 +68,9 @@ public class MainActivity extends AppCompatActivity {
             // make sure the request was successful
             if (resultCode == RESULT_OK) {
                 MapFragment fragment = (MapFragment) mAdapter.getRegisteredFragment(0);
-                fragment.markCurrentLocation(this, fragment.getCurrentLocation());
+                Location location = data.getExtras().getParcelable("location");
+                fragment.markCurrentLocation(this,
+                        new LatLng(location.getLatitude(),location.getLongitude()));
             }
         }
     }

@@ -20,7 +20,7 @@ public class ParkActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_park);
 
-        mLocation = getIntent().getExtras().getParcelable(MainActivity.EXTRA_LOCATION);
+        mLocation = getIntent().getExtras().getParcelable("location");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.parkToolbar);
         setSupportActionBar(toolbar);
@@ -33,6 +33,7 @@ public class ParkActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent returnIntent = getIntent();
+                returnIntent.putExtra("location", mLocation);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }

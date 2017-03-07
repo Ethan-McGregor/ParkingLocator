@@ -121,7 +121,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                         .setNegativeButton("No", null)
                         .create()
                         .show();*/
-                startActivityForResult(new Intent()
+                getActivity().startActivityForResult(new Intent()
                         .setClass(getActivity(), ParkActivity.class)
                         .putExtra(MainActivity.EXTRA_LOCATION, mLastLocation),
                         MainActivity.LOCATION_REQUEST

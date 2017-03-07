@@ -44,8 +44,17 @@ public class ParkActivity extends AppCompatActivity {
                 EditText year = (EditText)v.getRootView().findViewById(R.id.input_year);
                 EditText color = (EditText) v.getRootView().findViewById(R.id.input_color);
                 EditText details = (EditText) v.getRootView().findViewById(R.id.input_details);
-                double lat = mLocation.getLatitude();
-                double lon = mLocation.getLongitude();
+                double lat;
+                double lon;
+                try{
+                    lat = mLocation.getLatitude();
+                    lon = mLocation.getLongitude();
+                }
+                catch(java.lang.NullPointerException e){
+                    lat = 0.0;
+                    lon = 0.0;
+                }
+
                 
                 String id;
                 try {
@@ -86,7 +95,14 @@ public class ParkActivity extends AppCompatActivity {
 
     public String getDeviceId(Context context){
         TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-        return telephonyManager.getDeviceId();
+        String id;
+        try {
+            id = telephonyManager.getDeviceId();
+        }
+        catch(java.lang.SecurityException e){
+            id = "Emulator";
+        }
+        return id;
     }
 
 }

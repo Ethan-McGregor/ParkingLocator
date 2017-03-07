@@ -4,9 +4,15 @@
     <string name="tab_park">Park</string>
     <string name="tab_find">Find Car</string>
     <string name="tab_saved">Saved Locations</string>
+    <string name="car_info">Car Infos</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps">Map</string>
     <string name="map_current_position">Current Position</string>
+
+    <string name="dialog_permission_location_title">Location Permission Needed</string>
+    <string name="dialog_permission_location_body">This app needs the Location permission,
+        please accept to use location functionality</string>
+    <string name="dialog_mark_location_title">Park your car here?</string>
 </resources>

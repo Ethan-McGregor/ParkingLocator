@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,11 +31,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class ParkFragment extends Fragment implements OnMapReadyCallback,
+public class MapFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
+    public static final String TAG = "MapFragment";
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private int mTabNumber;
     private MapView mMapView;
     private GoogleMap mGoogleMap;
     private LocationRequest mLocationRequest;
@@ -42,15 +46,33 @@ public class ParkFragment extends Fragment implements OnMapReadyCallback,
     private Location mLastLocation;
     private Marker mCurrLocationMarker;
 
+    public static MapFragment newInstance(int num) {
+        MapFragment f = new MapFragment();
+        Bundle args = new Bundle();
+        args.putInt("num", num);
+        f.setArguments(args);
+        return f;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mTabNumber = getArguments() != null ? getArguments().getInt("num") : 1;
+        Log.i(TAG, "tab number: " + mTabNumber);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_park, container, false);
-
-        mMapView = (MapView) v.findViewById(R.id.mapView);
+        View v;
+        if (mTabNumber == 1) {
+            v = inflater.inflate(R.layout.fragment_map, container, false);
+            mMapView = (MapView) v.findViewById(R.id.mapView);
+        } else {
+            v = inflater.inflate(R.layout.fragment_map2, container, false);
+            mMapView = (MapView) v.findViewById(R.id.mapView2);
+        }
         mMapView.onCreate(savedInstanceState);
-        mMapView.getMapAsync(this); //this is important
-
+        mMapView.getMapAsync(this);
         return v;
     }
 
@@ -58,16 +80,16 @@ public class ParkFragment extends Fragment implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
+        // request permissions for Marshmallow and above
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(getActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
-                //Location Permission already granted
+                // location permission already granted
                 buildGoogleApiClient();
                 mGoogleMap.setMyLocationEnabled(true);
             } else {
-                //Request Location Permission
+                // request location permission
                 checkLocationPermission();
             }
         }
@@ -77,13 +99,29 @@ public class ParkFragment extends Fragment implements OnMapReadyCallback,
         }
         mGoogleMap.getUiSettings().setZoomGesturesEnabled(true);
         mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
+        FloatingActionButton fab;
 
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.myLocationButton);
+        if (mTabNumber == 1)
+            fab = (FloatingActionButton) getActivity().findViewById(R.id.myLocationButton);
+        else
+            fab = (FloatingActionButton) getActivity().findViewById(R.id.myLocationButton2);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mLastLocation != null)
-                    getCurrentLocation(mLastLocation);
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(getString(R.string.dialog_mark_location_title))
+                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface di, int i) {
+                                if (mLastLocation != null)
+                                    markCurrentLocation(new LatLng(mLastLocation.getLatitude(),
+                                            mLastLocation.getLongitude()));
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .create()
+                        .show();
             }
         });
     }
@@ -97,7 +135,7 @@ public class ParkFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onPause() {
         super.onPause();
-        //stop location updates when Activity is no longer active
+        // stop location updates when Activity is no longer active
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
@@ -154,37 +192,28 @@ public class ParkFragment extends Fragment implements OnMapReadyCallback,
     public void onLocationChanged(Location location)
     {
         mLastLocation = location;
-        if (mCurrLocationMarker != null) {
-            mCurrLocationMarker.remove();
-        }
-
-        getCurrentLocation(location);
-
-        //optionally, stop location updates if only current location is needed
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        // move map camera
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
+        // optionally, stop location updates if only current location is needed
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
     }
 
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
                 new AlertDialog.Builder(getActivity())
-                        .setTitle("Location Permission Needed")
-                        .setMessage("This app needs the Location permission, please accept to use location functionality")
+                        .setTitle(getString(R.string.dialog_permission_location_title))
+                        .setMessage(getString(R.string.dialog_permission_location_body))
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                //Prompt the user once explanation has been shown
+                                // Prompt the user once explanation has been shown
                                 ActivityCompat.requestPermissions(getActivity(),
                                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                         MY_PERMISSIONS_REQUEST_LOCATION );
@@ -192,8 +221,6 @@ public class ParkFragment extends Fragment implements OnMapReadyCallback,
                         })
                         .create()
                         .show();
-
-
             } else {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(getActivity(),
@@ -211,42 +238,30 @@ public class ParkFragment extends Fragment implements OnMapReadyCallback,
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // location-related task you need to do.
                     if (ContextCompat.checkSelfPermission(getActivity(),
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
-
                         if (mGoogleApiClient == null) {
                             buildGoogleApiClient();
                         }
                         mGoogleMap.setMyLocationEnabled(true);
                     }
-
                 } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
                     Toast.makeText(getActivity(), "Permission denied", Toast.LENGTH_LONG).show();
                 }
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
 
-    private void getCurrentLocation(Location location) {
-        //Place current location marker
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+    private void markCurrentLocation(LatLng latLng) {
+        // place current location marker
+        if (mCurrLocationMarker != null) {
+            mCurrLocationMarker.remove();
+        }
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title(getString(R.string.map_current_position));
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
         mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
-
-        //move map camera
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
     }
 }

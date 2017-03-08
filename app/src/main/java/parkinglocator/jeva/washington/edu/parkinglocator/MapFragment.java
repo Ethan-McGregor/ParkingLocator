@@ -63,7 +63,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             Bundle extras = getArguments();
             lat = extras.getDouble("lat");
             lon = extras.getDouble("lon");
-            details = extras.getString("details")
+            details = extras.getString("details");
         }
         return v;
     }

@@ -55,9 +55,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // initializing the tablayout
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_park)));
-        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_saved)));
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.car_info)));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        final FloatingActionButton fabPark = (FloatingActionButton) findViewById(R.id.myLocationButton);
+        fabPark.setOnClickListener(this);
 
         mPager = (ViewPager) findViewById(R.id.pager);
         mAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
@@ -69,7 +71,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int i = tab.getPosition();
                 mPager.setCurrentItem(i);
                 mCurrentTab = i;
-                Log.i(TAG, "current tab: " + mCurrentTab);
+                if (mCurrentTab == 0)
+                    fabPark.setVisibility(View.VISIBLE);
+                else
+                    fabPark.setVisibility(View.GONE);
             }
 
             @Override
@@ -82,10 +87,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
-
-        FloatingActionButton fabPark = (FloatingActionButton) findViewById(R.id.myLocationButton);
-        fabPark.setOnClickListener(this);
-
 
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
@@ -166,10 +167,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .putParcelableArrayListExtra("carList", FINALCARLIST),
                     MainActivity.LOCATION_REQUEST
                 );
-                break;
-            case 2:
-                startActivity(new Intent()
-                .setClass(getApplicationContext(), FindActivity.class));
                 break;
         }
     }

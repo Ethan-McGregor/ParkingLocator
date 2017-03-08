@@ -23,8 +23,6 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return new MapFragment();
             case 1:
-                return new SavedLocationsFragment();
-            case 2:
                 return new InfoFragment();
             default:
                 return null;

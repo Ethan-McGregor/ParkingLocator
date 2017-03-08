@@ -3,10 +3,13 @@ package parkinglocator.jeva.washington.edu.parkinglocator;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -44,7 +47,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
-    private int carCount = 0;
     private Marker mCurrLocationMarker;
     private double lat;
     private double lon;
@@ -95,10 +97,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         Log.i(MainActivity.TAG, "onMapReady");
 
         if (getActivity().getClass() == FindActivity.class) {
-            LatLng ltlng = new LatLng(lat, lon);
+            final LatLng ltlng = new LatLng(lat, lon);
             finalMarker = ltlng;
             markCurrentLocation(getContext(), ltlng);
-
+            FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.findFAB);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String uri = "http://maps.google.com/maps?f=d&hl=en&saddr="
+                            +mLastLocation.getLatitude()+","
+                            +mLastLocation.getLongitude()+"&daddr="
+                            +ltlng.latitude+","
+                            +ltlng.longitude;
+                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
+                    startActivity(Intent.createChooser(intent, "Select an application"));
+                }
+            });
         }
 
 

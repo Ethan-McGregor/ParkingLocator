@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -53,13 +57,10 @@ public class InfoFragment extends Fragment {
                     id = "Emulator";
                 }
                 if (dataSnapshot != null && dataSnapshot.getValue() != null) {
-
                     Map<String, ArrayList<Map<String, String>>> td = (HashMap<String, ArrayList<Map<String, String>>>) dataSnapshot.getValue();
 
                     ArrayList<String> Final = new ArrayList<String>();
-
                     cars = new ArrayList<Map<String, String>>();
-
                     FINALCARLIST = new ArrayList<CarObject>();
 
 
@@ -69,11 +70,7 @@ public class InfoFragment extends Fragment {
                         lat = "000000";
                         lon = "000000";
                         details = "NO details to show";
-
-
                     }
-                    //Go through each map in list.
-                    //get all the
 
                     for (Map<String, String> map : cars) {
                         CarObject temp = new CarObject();
@@ -99,43 +96,71 @@ public class InfoFragment extends Fragment {
                                 " Color: " + temp.getColor() + " Year: " + temp.getYear());
                     }
 
+                    RecyclerView mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view);
+                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+                    mRecyclerView.setLayoutManager(mLayoutManager);
+                    mRecyclerView.setAdapter(new RecyclerView.Adapter<CarViewHolder>() {
 
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, Final);
-
-                    ListView listView = (ListView) view.findViewById(R.id.list_view);
-
-                    listView.setAdapter(adapter);
-
-                    AdapterView.OnItemClickListener clickListener = new AdapterView.OnItemClickListener() {
                         @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                            Intent intent = new Intent(view.getContext(), FindActivity.class);
-                            //String finalLat =
-                            CarObject temp = FINALCARLIST.get(position);
-
-                            intent.putExtra("lat", temp.getLat());
-                            intent.putExtra("lon", temp.getLon());
-                            intent.putExtra("details", temp.getDetails());
-                            startActivity(intent);
+                        public CarViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                            View v = LayoutInflater.from(parent.getContext()).inflate(
+                                    R.layout.car_row,
+                                    parent,
+                                    false);
+                            return new CarViewHolder(v);
                         }
-                    };
-                    listView.setOnItemClickListener(clickListener);
+
+                        @Override
+                        public void onBindViewHolder(CarViewHolder vh, int position) {
+                            TextView tv = (TextView) vh.itemView.findViewById(R.id.text1);
+                            CarObject car = FINALCARLIST.get(position);
+                            tv.setText(car.getColor() + " " + car.getYear() + " " +
+                                    car.getMake() + " " + car.getModel());
+                            tv = (TextView) vh.itemView.findViewById(R.id.text2);
+                            tv.setText(car.getDetails());
+                        }
+
+                        @Override
+                        public int getItemCount() {
+                            return FINALCARLIST.size();
+                        }
+                    });
+                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
+                            mLayoutManager.getOrientation());
+                    mRecyclerView.addItemDecoration(dividerItemDecoration);
                 }
             }
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
             }
-
         });
         return view;
+    }
+
+    private class CarViewHolder
+            extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+
+        private CarViewHolder(View v) {
+            super(v);
+            v.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(v.getContext(), FindActivity.class);
+            CarObject temp = FINALCARLIST.get(getAdapterPosition());
+
+            intent.putExtra("lat", temp.getLat());
+            intent.putExtra("lon", temp.getLon());
+            intent.putExtra("details", temp.getDetails());
+            startActivity(intent);
+        }
     }
 
     public String getDeviceId(Context context){
         TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
         return telephonyManager.getDeviceId();
     }
-
-
-
 }

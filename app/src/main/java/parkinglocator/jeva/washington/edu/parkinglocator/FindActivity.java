@@ -1,12 +1,16 @@
 package parkinglocator.jeva.washington.edu.parkinglocator;
 
 import android.content.Intent;
+import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 
 public class FindActivity extends AppCompatActivity {
     private String lat;
@@ -46,6 +50,5 @@ public class FindActivity extends AppCompatActivity {
         mf.setArguments(data);
         tx.replace(R.id.fragment_placeholder, mf);
         tx.commit();
-
     }
 }

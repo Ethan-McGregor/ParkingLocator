@@ -9,19 +9,28 @@ public class CarObject {
     private String model;
     private String year;
     private String color;
+    private String lat;
+    private String lon;
+    private String details;
 
     public CarObject(){
         this.make = "";
         this.model = "";
         this.year = "";
         this.color = "";
+        this.lat = "";
+        this.lon ="";
+        this.details = "";
     }
 
-    public CarObject(String make, String modle, String year, String color){
+    public CarObject(String make, String modle, String year, String color, String lat, String lon, String details){
         this.make = make;
         this.model = modle;
         this.year = year;
         this.color = color;
+        this.lat = lat;
+        this.lon = lon;
+        this.details = details;
     }
 
     //getters
@@ -41,6 +50,11 @@ public class CarObject {
         return color;
     }
 
+    public String getLat() { return lat;}
+    public String getLon() { return lon;}
+    public String getDetails() { return details;}
+
+
 
     //setters
     public void setMake(String make) {
@@ -58,4 +72,18 @@ public class CarObject {
     public void setColor(String color) {
         this.color = color;
     }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public void setLon(String lon) {
+        this.lon = lon;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+
 }

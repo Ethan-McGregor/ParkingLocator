@@ -26,6 +26,7 @@ import java.util.Map;
 
 public class InfoFragment extends Fragment {
     private ArrayList<Map<String, String>> cars;
+    private ArrayList<CarObject> FINALCARLIST;
     private String lat = "";
     private String lon = "";
     private String details = "";
@@ -40,9 +41,9 @@ public class InfoFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_info, container, false);
 
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        cars = new ArrayList<Map<String, String>>();
 
-        database.addValueEventListener(new ValueEventListener() {
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String id;
@@ -58,6 +59,7 @@ public class InfoFragment extends Fragment {
 
                 cars = new ArrayList<Map<String, String>>();
 
+                FINALCARLIST = new ArrayList<CarObject>();
 
 
                 if (td.get(id) != null){
@@ -73,25 +75,27 @@ public class InfoFragment extends Fragment {
                 //get all the
 
                 for (Map<String, String> map : cars) {
-                    String Value = "";
+                    CarObject temp = new CarObject();
                     for (String key : map.keySet()) {
                         if(key.equals("make")) {
-                            Value += " Make: " + map.get(key);
+                            temp.setMake(map.get(key));
                         } else if (key.equals("color")) {
-                            Value += " Color: " + map.get(key);
+                            temp.setColor(map.get(key));
                         } else if (key.equals("model")){
-                            Value += " Model: " + map.get(key);
+                            temp.setModel(map.get(key));
                         } else if (key.equals("year")) {
-                            Value += " Year: " + map.get(key);
+                            temp.setYear(map.get(key));
                         } else if (key.equals("lat")) {
-                            lat = map.get(key);
+                            temp.setLat(map.get(key));
                         }else if (key.equals("lon")) {
-                            lon = map.get(key);
+                            temp.setLon(map.get(key));
                         }else if (key.equals("details")) {
-                            details = map.get(key);
+                            temp.setDetails(map.get(key));
                         }
                     }
-                    Final.add(Value);
+                    FINALCARLIST.add(temp);
+                    Final.add("Make: " + temp.getMake() + " Model: " + temp.getModel() +
+                            " Color: " + temp.getColor() + " Year: " + temp.getYear());
                 }
 
 
@@ -106,9 +110,11 @@ public class InfoFragment extends Fragment {
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                         Intent intent = new Intent(view.getContext(), FindActivity.class);
                         //String finalLat =
-                        intent.putExtra("lat", lat);
-                        intent.putExtra("lon", lon);
-                        intent.putExtra("details", details);
+                        CarObject temp = FINALCARLIST.get(position);
+
+                        intent.putExtra("lat", temp.getLat());
+                        intent.putExtra("lon", temp.getLon());
+                        intent.putExtra("details", temp.getDetails());
                         startActivity(intent);
                     }
                 };

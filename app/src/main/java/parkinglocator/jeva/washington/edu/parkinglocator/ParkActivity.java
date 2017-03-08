@@ -14,15 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ParkActivity extends AppCompatActivity {
     private Location mLocation;
@@ -92,31 +85,14 @@ public class ParkActivity extends AppCompatActivity {
         final DatabaseReference databasePull = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference user = database.getReference(userId);
 
-        databasePull.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, ArrayList<Map<String, String>>> td = (HashMap<String,ArrayList<Map<String, String>>>) dataSnapshot.getValue();
-                ArrayList<Map<String, String>> cars = new ArrayList<Map<String, String>>();
-                cars = td.get(userId);
 
-                for (Map<String, String> map : cars) {
-                   count++;
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-            }
-
-            });
-
-        user.child("" +count).child("make").setValue(make);
-        user.child("" +count).child("model").setValue(model);
-        user.child("" +count).child("year").setValue(year);
-        user.child("" +count).child("color").setValue(color);
-        user.child("" +count).child("details").setValue(details);
-        user.child("" +count).child("lat").setValue("" + lat);
-        user.child("" +count).child("lon").setValue("" + lon);
+        user.child("" + carCount).child("make").setValue(make);
+        user.child("" + carCount).child("model").setValue(model);
+        user.child("" + carCount).child("year").setValue(year);
+        user.child("" + carCount).child("color").setValue(color);
+        user.child("" + carCount).child("details").setValue(details);
+        user.child("" + carCount).child("lat").setValue("" + lat);
+        user.child("" + carCount).child("lon").setValue("" + lon);
 
     }
 

@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_help:
-                // open help screen
+                startActivity(new Intent().setClass(this, HelpActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -162,6 +162,7 @@ public class InfoFragment extends Fragment {
                     } else {
                         mAdapter = mRecyclerView.getAdapter();
                         mAdapter.notifyDataSetChanged();
+                        ((MainActivity) getActivity()).updateCarList(FINALCARLIST);
                     }
                 }
             }

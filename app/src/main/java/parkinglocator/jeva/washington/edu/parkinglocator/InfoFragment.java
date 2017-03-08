@@ -83,10 +83,10 @@ public class InfoFragment extends Fragment {
                             Value += " Model: " + map.get(key);
                         } else if (key.equals("year")) {
                             Value += " Year: " + map.get(key);
-                        }else if (key.equals("lat")) {
+                        } else if (key.equals("lat")) {
                             lat = map.get(key);
                         }else if (key.equals("lon")) {
-                           lon = map.get(key);
+                            lon = map.get(key);
                         }else if (key.equals("details")) {
                             details = map.get(key);
                         }
@@ -105,6 +105,7 @@ public class InfoFragment extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                         Intent intent = new Intent(view.getContext(), FindActivity.class);
+                        //String finalLat =
                         intent.putExtra("lat", lat);
                         intent.putExtra("lon", lon);
                         intent.putExtra("details", details);

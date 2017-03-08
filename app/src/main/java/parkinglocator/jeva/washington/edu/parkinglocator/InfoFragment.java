@@ -49,78 +49,79 @@ public class InfoFragment extends Fragment {
                 String id;
                 try {
                     id = getDeviceId(view.getContext());
-                }
-                catch(java.lang.SecurityException e){
+                } catch (java.lang.SecurityException e) {
                     id = "Emulator";
                 }
-                Map<String, ArrayList<Map<String, String>>> td = (HashMap<String,ArrayList<Map<String, String>>>) dataSnapshot.getValue();
+                if (dataSnapshot != null && dataSnapshot.getValue() != null) {
 
-                ArrayList<String> Final = new ArrayList<String>();
+                    Map<String, ArrayList<Map<String, String>>> td = (HashMap<String, ArrayList<Map<String, String>>>) dataSnapshot.getValue();
 
-                cars = new ArrayList<Map<String, String>>();
+                    ArrayList<String> Final = new ArrayList<String>();
 
-                FINALCARLIST = new ArrayList<CarObject>();
+                    cars = new ArrayList<Map<String, String>>();
 
-
-                if (td.get(id) != null){
-                    cars = td.get(id);
-                }else{
-                    lat = "000000";
-                    lon = "000000";
-                    details= "NO details to show";
+                    FINALCARLIST = new ArrayList<CarObject>();
 
 
-                }
-                //Go through each map in list.
-                //get all the
+                    if (td.get(id) != null) {
+                        cars = td.get(id);
+                    } else {
+                        lat = "000000";
+                        lon = "000000";
+                        details = "NO details to show";
 
-                for (Map<String, String> map : cars) {
-                    CarObject temp = new CarObject();
-                    for (String key : map.keySet()) {
-                        if(key.equals("make")) {
-                            temp.setMake(map.get(key));
-                        } else if (key.equals("color")) {
-                            temp.setColor(map.get(key));
-                        } else if (key.equals("model")){
-                            temp.setModel(map.get(key));
-                        } else if (key.equals("year")) {
-                            temp.setYear(map.get(key));
-                        } else if (key.equals("lat")) {
-                            temp.setLat(map.get(key));
-                        }else if (key.equals("lon")) {
-                            temp.setLon(map.get(key));
-                        }else if (key.equals("details")) {
-                            temp.setDetails(map.get(key));
+
+                    }
+                    //Go through each map in list.
+                    //get all the
+
+                    for (Map<String, String> map : cars) {
+                        CarObject temp = new CarObject();
+                        for (String key : map.keySet()) {
+                            if (key.equals("make")) {
+                                temp.setMake(map.get(key));
+                            } else if (key.equals("color")) {
+                                temp.setColor(map.get(key));
+                            } else if (key.equals("model")) {
+                                temp.setModel(map.get(key));
+                            } else if (key.equals("year")) {
+                                temp.setYear(map.get(key));
+                            } else if (key.equals("lat")) {
+                                temp.setLat(map.get(key));
+                            } else if (key.equals("lon")) {
+                                temp.setLon(map.get(key));
+                            } else if (key.equals("details")) {
+                                temp.setDetails(map.get(key));
+                            }
                         }
+                        FINALCARLIST.add(temp);
+                        Final.add("Make: " + temp.getMake() + " Model: " + temp.getModel() +
+                                " Color: " + temp.getColor() + " Year: " + temp.getYear());
                     }
-                    FINALCARLIST.add(temp);
-                    Final.add("Make: " + temp.getMake() + " Model: " + temp.getModel() +
-                            " Color: " + temp.getColor() + " Year: " + temp.getYear());
+
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, Final);
+
+                    ListView listView = (ListView) view.findViewById(R.id.list_view);
+
+                    listView.setAdapter(adapter);
+
+                    AdapterView.OnItemClickListener clickListener = new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                            Intent intent = new Intent(view.getContext(), FindActivity.class);
+                            //String finalLat =
+                            CarObject temp = FINALCARLIST.get(position);
+
+                            intent.putExtra("lat", temp.getLat());
+                            intent.putExtra("lon", temp.getLon());
+                            intent.putExtra("details", temp.getDetails());
+                            startActivity(intent);
+                        }
+                    };
+                    listView.setOnItemClickListener(clickListener);
                 }
-
-
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, Final);
-
-                ListView listView = (ListView) view.findViewById(R.id.list_view);
-
-                listView.setAdapter(adapter);
-
-                AdapterView.OnItemClickListener clickListener = new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                        Intent intent = new Intent(view.getContext(), FindActivity.class);
-                        //String finalLat =
-                        CarObject temp = FINALCARLIST.get(position);
-
-                        intent.putExtra("lat", temp.getLat());
-                        intent.putExtra("lon", temp.getLon());
-                        intent.putExtra("details", temp.getDetails());
-                        startActivity(intent);
-                    }
-                };
-                listView.setOnItemClickListener(clickListener);
             }
-
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value

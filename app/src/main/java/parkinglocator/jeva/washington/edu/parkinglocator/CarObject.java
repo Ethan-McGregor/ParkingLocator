@@ -1,10 +1,13 @@
 package parkinglocator.jeva.washington.edu.parkinglocator;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Ethan on 3/6/2017.
  */
 
-public class CarObject {
+public class CarObject implements Parcelable {
     private String make;
     private String model;
     private String year;
@@ -86,4 +89,42 @@ public class CarObject {
     }
 
 
+    // Parcelling part
+    public CarObject(Parcel in){
+        String[] data = new String[7];
+
+        in.readStringArray(data);
+        // the order needs to be the same as in writeToParcel() method
+        this.make = data[0];
+        this.model = data[1];
+        this.year = data[2];
+        this.color = data[3];
+        this.lat = data[4];
+        this.lon = data[5];
+        this.details = data[6];
+    }
+
+    public int describeContents(){
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringArray(new String[] {this.make,
+        this.model,
+        this.year,
+        this.color,
+        this.lat,
+        this.lon,
+        this.details});
+    }
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public CarObject createFromParcel(Parcel in) {
+            return new CarObject(in);
+        }
+
+        public CarObject[] newArray(int size) {
+            return new CarObject[size];
+        }
+    };
 }

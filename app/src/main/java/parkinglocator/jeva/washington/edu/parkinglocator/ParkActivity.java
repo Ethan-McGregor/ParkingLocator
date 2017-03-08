@@ -17,11 +17,15 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 public class ParkActivity extends AppCompatActivity {
     private Location mLocation;
     private int carCount;
     private String id;
     private  int count = 0;
+    private ArrayList<CarObject> FINALCARLIST;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +33,7 @@ public class ParkActivity extends AppCompatActivity {
 
         carCount = getIntent().getExtras().getInt("count");
         mLocation = getIntent().getExtras().getParcelable("location");
-
+        FINALCARLIST = getIntent().getExtras().getParcelableArrayList("carList");
         Toolbar toolbar = (Toolbar) findViewById(R.id.parkToolbar);
         setSupportActionBar(toolbar);
         ActionBar ab = getSupportActionBar();
@@ -85,7 +89,9 @@ public class ParkActivity extends AppCompatActivity {
         final DatabaseReference databasePull = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference user = database.getReference(userId);
 
-
+        if (FINALCARLIST != null ) {
+            carCount = FINALCARLIST.size();
+        }
         user.child("" + carCount).child("make").setValue(make);
         user.child("" + carCount).child("model").setValue(model);
         user.child("" + carCount).child("year").setValue(year);

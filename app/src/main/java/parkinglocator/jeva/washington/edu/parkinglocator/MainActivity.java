@@ -42,13 +42,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String TAG = "MainActivity";
     public static final int LOCATION_REQUEST = 1;
     private int carCount = 0;
-
     private ArrayList<CarObject> FINALCARLIST;
 
     private String lat = "";
     private String lon = "";
     private String details = "";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,12 +113,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Map<String, ArrayList<Map<String, String>>> td = (HashMap<String, ArrayList<Map<String, String>>>) dataSnapshot.getValue();
 
                     ArrayList<String> Final = new ArrayList<String>();
-
                     ArrayList<Map<String, String>> cars = new ArrayList<Map<String, String>>();
 
                     FINALCARLIST = new ArrayList<CarObject>();
-
-
                     if (td.get(uniqueID) != null) {
                         cars = td.get(uniqueID);
                     } else {
@@ -150,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                         FINALCARLIST.add(temp);
                     }
+                    carCount = FINALCARLIST.size();
                 }
             }
 
@@ -183,11 +179,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (mCurrentTab) {
             case 0:
+                Log.i(TAG, "Main " + carCount);
                 MapFragment mFragment = (MapFragment) mAdapter.getRegisteredFragment(0);
                 startActivityForResult(new Intent()
                     .setClass(getApplicationContext(), ParkActivity.class)
                     .putExtra("location", mFragment.getCurrentLocation())
-                    .putExtra("count", carCount++)
+                    .putExtra("count", carCount)
                     .putParcelableArrayListExtra("carList", FINALCARLIST),
                     MainActivity.LOCATION_REQUEST
                 );
@@ -201,9 +198,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (requestCode == LOCATION_REQUEST) {
             // make sure the request was successful
             if (resultCode == RESULT_OK) {
-
                 MapFragment fragment = (MapFragment) mAdapter.getRegisteredFragment(0);
                 Location location = data.getExtras().getParcelable("location");
+                FINALCARLIST = data.getExtras().getParcelableArrayList("carList");
                 double lat;
                 double lon;
                 try{

@@ -26,9 +26,9 @@ public class CarObject implements Parcelable {
         this.details = "";
     }
 
-    public CarObject(String make, String modle, String year, String color, String lat, String lon, String details){
+    public CarObject(String make, String model, String year, String color, String lat, String lon, String details){
         this.make = make;
-        this.model = modle;
+        this.model = model;
         this.year = year;
         this.color = color;
         this.lat = lat;

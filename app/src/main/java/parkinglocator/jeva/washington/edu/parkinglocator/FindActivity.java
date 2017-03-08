@@ -39,6 +39,7 @@ public class FindActivity extends AppCompatActivity {
         Bundle data = new Bundle();
         data.putDouble("lat", lats);
         data.putDouble("lon", lons);
+        data.putString("details", details);
         mf.setArguments(data);
         tx.replace(R.id.fragment_placeholder, mf);
         tx.commit();

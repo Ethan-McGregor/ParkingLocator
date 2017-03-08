@@ -49,6 +49,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     private double lat;
     private double lon;
     private LatLng finalMarker;
+    private String details;
 
 
     @Override
@@ -62,6 +63,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             Bundle extras = getArguments();
             lat = extras.getDouble("lat");
             lon = extras.getDouble("lon");
+            details = extras.getString("details")
         }
         return v;
     }
@@ -248,7 +250,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         }
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        markerOptions.title(context.getString(R.string.map_current_position));
+        if (getActivity().getClass() == FindActivity.class) {
+            markerOptions.title(details);
+        } else {
+            markerOptions.title(context.getString(R.string.map_current_position));
+        }
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
         mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
     }

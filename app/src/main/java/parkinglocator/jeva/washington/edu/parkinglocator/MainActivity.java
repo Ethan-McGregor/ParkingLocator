@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ViewPager mPager;
     private PagerAdapter mAdapter;
     private StorageReference mStorageRef;
+    private String uniqueID;
     private int mCurrentTab;
     public static final String TAG = "MainActivity";
     public static final int LOCATION_REQUEST = 1;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // generate random id
         SharedPreferences sPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String uniqueID = sPrefs.getString("key_uuid", null);
+        uniqueID = sPrefs.getString("key_uuid", null);
         if (uniqueID == null) {
             uniqueID = UUID.randomUUID().toString();
             SharedPreferences.Editor editor = sPrefs.edit();
@@ -110,12 +111,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String id;
-                try {
-                    id = getDeviceId(getApplicationContext());
-                } catch (java.lang.SecurityException e) {
-                    id = "Emulator";
-                }
                 if (dataSnapshot != null && dataSnapshot.getValue() != null) {
                     Map<String, ArrayList<Map<String, String>>> td = (HashMap<String, ArrayList<Map<String, String>>>) dataSnapshot.getValue();
 
@@ -126,17 +121,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     FINALCARLIST = new ArrayList<CarObject>();
 
 
-                    if (td.get(id) != null) {
-                        cars = td.get(id);
+                    if (td.get(uniqueID) != null) {
+                        cars = td.get(uniqueID);
                     } else {
                         lat = "000000";
                         lon = "000000";
                         details = "NO details to show";
-
-
                     }
-                    //Go through each map in list.
-                    //get all the
 
                     for (Map<String, String> map : cars) {
                         CarObject temp = new CarObject();
@@ -158,7 +149,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                         }
                         FINALCARLIST.add(temp);
-
                     }
                 }
             }
@@ -167,7 +157,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
             }
-
         });
     }
 
@@ -229,17 +218,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         new LatLng(lat,lon));
             }
         }
-    }
-
-    public String getDeviceId(Context context){
-        TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-        String id;
-        try {
-            id = telephonyManager.getDeviceId();
-        }
-        catch(java.lang.SecurityException e){
-            id = "Emulator";
-        }
-        return id;
     }
 }

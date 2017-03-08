@@ -27,7 +27,6 @@ public class ParkActivity extends AppCompatActivity {
     private Location mLocation;
     private int carCount;
     private String id;
-    private  int count = 0;
     private ArrayList<CarObject> FINALCARLIST;
 
     @Override

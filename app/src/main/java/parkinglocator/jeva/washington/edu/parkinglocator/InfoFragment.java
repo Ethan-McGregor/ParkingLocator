@@ -25,17 +25,14 @@ import java.util.Map;
 
 
 public class InfoFragment extends Fragment {
-    private  ArrayList<Map<String, String>> cars;
+    private ArrayList<Map<String, String>> cars;
     private String lan = "";
     private String lon = "";
     private String details = "";
 
-
-
     public InfoFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -54,21 +51,24 @@ public class InfoFragment extends Fragment {
                 }
                 catch(java.lang.SecurityException e){
                     id = "Emulator";
-
                 }
                 Map<String, ArrayList<Map<String, String>>> td = (HashMap<String,ArrayList<Map<String, String>>>) dataSnapshot.getValue();
-
-
-//                for (ArrayList<String> map : td.get(id)) {
-//                    Log.v("Map", map.toString());
-//                }
 
                 ArrayList<String> Final = new ArrayList<String>();
 
                 cars = new ArrayList<Map<String, String>>();
 
-                cars = td.get(id);
 
+
+                if (td.get(id) != null){
+                    cars = td.get(id);
+                }else{
+                    lan = "000000";
+                    lon = "000000";
+                    details= "NO details to show";
+
+
+                }
                 //Go through each map in list.
                 //get all the
 
@@ -90,7 +90,6 @@ public class InfoFragment extends Fragment {
                         }else if (key.equals("details")) {
                             details = key;
                         }
-
                     }
                     Final.add(Value);
                 }
@@ -105,25 +104,20 @@ public class InfoFragment extends Fragment {
                 AdapterView.OnItemClickListener clickListener = new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                        //Intent intent = new Intent(view.getContext(), EnterJacob'sClass.class);
+                        Intent intent = new Intent(view.getContext(), FindActivity.class);
                         intent.putExtra("lan", lan);
                         intent.putExtra("lon", lon);
                         intent.putExtra("details", details);
                         startActivity(intent);
                     }
                 };
-
                 listView.setOnItemClickListener(clickListener);
-
-
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-
             }
-
 
         });
         return view;

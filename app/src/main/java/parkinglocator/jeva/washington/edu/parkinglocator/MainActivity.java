@@ -1,23 +1,29 @@
 package parkinglocator.jeva.washington.edu.parkinglocator;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.View;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private TabLayout tabLayout;
     private ViewPager mPager;
     private PagerAdapter mAdapter;
     private StorageReference mStorageRef;
+    private int mCurrentTab;
     public static final String TAG = "MainActivity";
-    public static final String EXTRA_LOCATION = "edu.washington.gjdevera.quizdroid.LOCATION";
     public static final int LOCATION_REQUEST = 1;
+    private int carCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +48,10 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                mPager.setCurrentItem(tab.getPosition());
+                int i = tab.getPosition();
+                mPager.setCurrentItem(i);
+                mCurrentTab = i;
+                Log.i(TAG, "current tab: " + mCurrentTab);
             }
 
             @Override
@@ -55,6 +64,28 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        FloatingActionButton fabPark = (FloatingActionButton) findViewById(R.id.myLocationButton);
+        fabPark.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (mCurrentTab) {
+            case 0:
+                MapFragment mFragment = (MapFragment) mAdapter.getRegisteredFragment(0);
+                startActivityForResult(new Intent()
+                    .setClass(getApplicationContext(), ParkActivity.class)
+                    .putExtra("location", mFragment.getCurrentLocation())
+                    .putExtra("count", carCount++),
+                    MainActivity.LOCATION_REQUEST
+                );
+                break;
+            case 2:
+                startActivity(new Intent()
+                .setClass(getApplicationContext(), FindActivity.class));
+                break;
+        }
     }
 
     @Override
@@ -65,7 +96,19 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
 
                 MapFragment fragment = (MapFragment) mAdapter.getRegisteredFragment(0);
-                fragment.markCurrentLocation(this, fragment.getCurrentLocation());
+                Location location = data.getExtras().getParcelable("location");
+                double lat;
+                double lon;
+                try{
+                    lat = location.getLatitude();
+                    lon = location.getLongitude();
+                }
+                catch(java.lang.NullPointerException e){
+                    lat = 0.0;
+                    lon = 0.0;
+                }
+                fragment.markCurrentLocation(this,
+                        new LatLng(lat,lon));
             }
         }
     }

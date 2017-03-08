@@ -22,6 +22,9 @@ public class FindActivity extends AppCompatActivity {
         lat = intent.getStringExtra("lat");
         lon = intent.getStringExtra("lon");
         details = intent.getStringExtra("details");
+        if (details.equals("")) {
+            details = "No Details Available!";
+        }
         Log.i(MainActivity.TAG, "" + lat + " " + lon + " " + details);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.findToolbar);

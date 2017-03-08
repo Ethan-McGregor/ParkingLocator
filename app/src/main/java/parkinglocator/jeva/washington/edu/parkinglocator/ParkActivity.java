@@ -62,6 +62,9 @@ public class ParkActivity extends AppCompatActivity {
                     lat = 0.0;
                     lon = 0.0;
                 }
+                FINALCARLIST.add(new CarObject(make.getText().toString(),
+                        model.getText().toString(),year.getText().toString(),color.getText().toString(),
+                        "" + lat, "" + lon, details.getText().toString()));
 
                 SharedPreferences sPrefs = PreferenceManager.getDefaultSharedPreferences(ParkActivity.this);
                 id = sPrefs.getString("key_uuid", null);
@@ -72,7 +75,9 @@ public class ParkActivity extends AppCompatActivity {
                 Toast.makeText(v.getContext(),"Car information submitted and saved!", Toast.LENGTH_SHORT).show();
 
                 Intent returnIntent = getIntent();
-                returnIntent.putExtra("location", mLocation);
+                returnIntent
+                        .putExtra("location", mLocation)
+                        .putParcelableArrayListExtra("carList", FINALCARLIST);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
@@ -82,12 +87,13 @@ public class ParkActivity extends AppCompatActivity {
     public void writeUserData(final String userId, int car, String make, String model, String year,
                                      String color, String details, double lat, double lon){
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference databasePull = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference user = database.getReference(userId);
 
         if (FINALCARLIST != null ) {
-            carCount = FINALCARLIST.size();
+            // index to write to
+            carCount = FINALCARLIST.size() - 1;
         }
+        Log.i(MainActivity.TAG, "Park " + carCount);
         user.child("" + carCount).child("make").setValue(make);
         user.child("" + carCount).child("model").setValue(model);
         user.child("" + carCount).child("year").setValue(year);

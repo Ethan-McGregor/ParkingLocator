@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -145,7 +146,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                         FINALCARLIST.add(temp);
                     }
-                    carCount = FINALCARLIST.size();
                 }
             }
 
@@ -179,6 +179,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (mCurrentTab) {
             case 0:
+                carCount = FINALCARLIST.size();
                 Log.i(TAG, "Main " + carCount);
                 MapFragment mFragment = (MapFragment) mAdapter.getRegisteredFragment(0);
                 startActivityForResult(new Intent()
@@ -215,5 +216,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         new LatLng(lat,lon));
             }
         }
+    }
+
+    public void updateCarList(ArrayList<CarObject> list) {
+        FINALCARLIST = list;
     }
 }

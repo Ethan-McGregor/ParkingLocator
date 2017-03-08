@@ -54,10 +54,6 @@ public class InfoFragment extends Fragment {
                 }
                 Map<String, ArrayList<Map<String, String>>> td = (HashMap<String,ArrayList<Map<String, String>>>) dataSnapshot.getValue();
 
-//                for (ArrayList<String> map : td.get(id)) {
-//                    Log.v("Map", map.toString());
-//                }
-
                 ArrayList<String> Final = new ArrayList<String>();
 
                 cars = new ArrayList<Map<String, String>>();

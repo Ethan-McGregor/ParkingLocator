@@ -3,7 +3,6 @@ package parkinglocator.jeva.washington.edu.parkinglocator;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -31,6 +30,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -45,6 +46,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     private Location mLastLocation;
     private int carCount = 0;
     private Marker mCurrLocationMarker;
+    private double lat;
+    private double lon;
+    private LatLng finalMarker;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,6 +58,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
         Log.i(MainActivity.TAG, "onCreateView");
+        if (getActivity().getClass() == FindActivity.class) {
+            Bundle extras = getArguments();
+            lat = extras.getDouble("lat");
+            lon = extras.getDouble("lon");
+        }
         return v;
     }
 
@@ -81,6 +91,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
         mGoogleMap.getUiSettings().setMapToolbarEnabled(false);
         Log.i(MainActivity.TAG, "onMapReady");
+
+        if (getActivity().getClass() == FindActivity.class) {
+            LatLng ltlng = new LatLng(lat, lon);
+            finalMarker = ltlng;
+            markCurrentLocation(getContext(), ltlng);
+
+        }
+
+
     }
 
     @Override
@@ -156,6 +175,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         // optionally, stop location updates if only current location is needed
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        }
+
+        if (getActivity().getClass() == FindActivity.class) {
+            Polyline polyline1 = mGoogleMap.addPolyline(new PolylineOptions()
+                    .clickable(true)
+                    .add(finalMarker,
+                            new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude())));
         }
     }
 

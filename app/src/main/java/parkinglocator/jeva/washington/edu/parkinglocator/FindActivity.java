@@ -31,15 +31,19 @@ public class FindActivity extends AppCompatActivity {
         ab.setHomeAsUpIndicator(R.drawable.ic_action_cancel);
         ab.setDisplayHomeAsUpEnabled(true);
 
+        double lats = Double.parseDouble(lat);
+        double lons = Double.parseDouble(lon);
+
         MapFragment mf = new MapFragment();
         FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+        Bundle data = new Bundle();
+        data.putDouble("lat", lats);
+        data.putDouble("lon", lons);
+        mf.setArguments(data);
         tx.replace(R.id.fragment_placeholder, mf);
         tx.commit();
-//
-//        double lats = Double.parseDouble(lat);
-//        double lons = Double.parseDouble(lon);
-//        LatLng latLng = new LatLng(lats, lons);
-//        Context con = getApplicationContext();
-//        mf.markCurrentLocation(con,latLng);
+
+
+
     }
 }

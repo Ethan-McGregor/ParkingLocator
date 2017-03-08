@@ -62,6 +62,8 @@ public class ParkActivity extends AppCompatActivity {
                     lat = 0.0;
                     lon = 0.0;
                 }
+                
+                String id;
 
                 try {
                     id = getDeviceId(v.getContext());

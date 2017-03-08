@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Parking Locator</string>
+    <string name="app_name">Easy Park</string>
     <string name="tab_park">Park</string>
     <string name="tab_saved">Saved Locations</string>
     <string name="car_info">Car Info</string>

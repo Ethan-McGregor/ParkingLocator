@@ -34,6 +34,7 @@ public class InfoFragment extends Fragment {
     private String lat = "";
     private String lon = "";
     private String details = "";
+    private LinearLayoutManager mLayoutManager;
 
     public InfoFragment() {
         // Required empty public constructor
@@ -45,14 +46,12 @@ public class InfoFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_info, container, false);
 
         Button btn = (Button) view.findViewById(R.id.button4);
-
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 refresh();
-            }});
-       refresh();
-
+            }
+        });
+        refresh();
         return view;
     }
 
@@ -126,37 +125,44 @@ public class InfoFragment extends Fragment {
                     }
 
                     RecyclerView mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view);
-                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-                    mRecyclerView.setLayoutManager(mLayoutManager);
-                    mRecyclerView.setAdapter(new RecyclerView.Adapter<CarViewHolder>() {
+                    RecyclerView.Adapter<CarViewHolder> mAdapter;
+                    if (mRecyclerView.getLayoutManager() == null) {
+                        mLayoutManager = new LinearLayoutManager(getActivity());
+                        mRecyclerView.setLayoutManager(mLayoutManager);
+                        mAdapter = new RecyclerView.Adapter<CarViewHolder>() {
 
-                        @Override
-                        public CarViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                            View v = LayoutInflater.from(parent.getContext()).inflate(
-                                    R.layout.car_row,
-                                    parent,
-                                    false);
-                            return new CarViewHolder(v);
-                        }
+                            @Override
+                            public CarViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                                View v = LayoutInflater.from(parent.getContext()).inflate(
+                                        R.layout.car_row,
+                                        parent,
+                                        false);
+                                return new CarViewHolder(v);
+                            }
 
-                        @Override
-                        public void onBindViewHolder(CarViewHolder vh, int position) {
-                            TextView tv = (TextView) vh.itemView.findViewById(R.id.text1);
-                            CarObject car = FINALCARLIST.get(position);
-                            tv.setText(car.getColor() + " " + car.getYear() + " " +
-                                    car.getMake() + " " + car.getModel());
-                            tv = (TextView) vh.itemView.findViewById(R.id.text2);
-                            tv.setText(car.getDetails());
-                        }
+                            @Override
+                            public void onBindViewHolder(CarViewHolder vh, int position) {
+                                TextView tv = (TextView) vh.itemView.findViewById(R.id.text1);
+                                CarObject car = FINALCARLIST.get(position);
+                                tv.setText(car.getColor() + " " + car.getYear() + " " +
+                                        car.getMake() + " " + car.getModel());
+                                tv = (TextView) vh.itemView.findViewById(R.id.text2);
+                                tv.setText(car.getDetails());
+                            }
 
-                        @Override
-                        public int getItemCount() {
-                            return FINALCARLIST.size();
-                        }
-                    });
-                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
-                            mLayoutManager.getOrientation());
-                    mRecyclerView.addItemDecoration(dividerItemDecoration);
+                            @Override
+                            public int getItemCount() {
+                                return FINALCARLIST.size();
+                            }
+                        };
+                        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
+                                mLayoutManager.getOrientation());
+                        mRecyclerView.addItemDecoration(dividerItemDecoration);
+                        mRecyclerView.setAdapter(mAdapter);
+                    } else {
+                        mAdapter = mRecyclerView.getAdapter();
+                        mAdapter.notifyDataSetChanged();
+                    }
                 }
             }
             @Override

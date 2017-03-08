@@ -2,8 +2,10 @@ package parkinglocator.jeva.washington.edu.parkinglocator;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -28,6 +30,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private TabLayout tabLayout;
@@ -54,6 +57,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mStorageRef = FirebaseStorage.getInstance().getReference();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // generate random id
+        SharedPreferences sPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String uniqueID = sPrefs.getString("key_uuid", null);
+        if (uniqueID == null) {
+            uniqueID = UUID.randomUUID().toString();
+            SharedPreferences.Editor editor = sPrefs.edit();
+            editor.putString("key_uuid", uniqueID);
+            editor.commit();
+        }
 
         // initializing the tablayout
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);

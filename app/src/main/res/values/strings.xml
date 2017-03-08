@@ -9,7 +9,11 @@
 
     <string name="dialog_permission_location_title">Location Permission Needed</string>
     <string name="dialog_permission_location_body">This app needs the Location permission,
-        please accept to use location functionality</string>
+        please accept to use location functionality.</string>
+
+    <string name="dialog_permission_phone_title">Device ID Permission</string>
+    <string name="dialog_permission_phone_body">This app needs to be able to identify your
+        device so that your car locations are only known to you.</string>
 
     <string name="title_activity_park">Park</string>
     <string name="button_park">Park</string>

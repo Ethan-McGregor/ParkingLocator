@@ -1,14 +1,26 @@
 package parkinglocator.jeva.washington.edu.parkinglocator;
 
 
+import android.*;
+import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.provider.Settings.Secure;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,6 +36,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +45,7 @@ import java.util.Map;
 public class InfoFragment extends Fragment {
     private ArrayList<Map<String, String>> cars;
     private ArrayList<CarObject> FINALCARLIST;
+    private String id;
     private String lat = "";
     private String lon = "";
     private String details = "";
@@ -43,26 +58,22 @@ public class InfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_info, container, false);
-
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
         database.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String id;
-                try {
-                    id = getDeviceId(view.getContext());
-                } catch (java.lang.SecurityException e) {
-                    id = "Emulator";
-                }
+                SharedPreferences sPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                id = sPrefs.getString("key_uuid", null);
+
                 if (dataSnapshot != null && dataSnapshot.getValue() != null) {
+                    Log.d(MainActivity.TAG, "" + dataSnapshot.getValue());
                     Map<String, ArrayList<Map<String, String>>> td = (HashMap<String, ArrayList<Map<String, String>>>) dataSnapshot.getValue();
 
                     ArrayList<String> Final = new ArrayList<String>();
                     cars = new ArrayList<Map<String, String>>();
                     FINALCARLIST = new ArrayList<CarObject>();
-
 
                     if (td.get(id) != null) {
                         cars = td.get(id);
@@ -157,10 +168,5 @@ public class InfoFragment extends Fragment {
             intent.putExtra("details", temp.getDetails());
             startActivity(intent);
         }
-    }
-
-    public String getDeviceId(Context context){
-        TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-        return telephonyManager.getDeviceId();
     }
 }

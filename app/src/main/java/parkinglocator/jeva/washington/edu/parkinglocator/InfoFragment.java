@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class InfoFragment extends Fragment {
     private ArrayList<Map<String, String>> cars;
-    private String lan = "";
+    private String lat = "";
     private String lon = "";
     private String details = "";
 
@@ -63,7 +63,7 @@ public class InfoFragment extends Fragment {
                 if (td.get(id) != null){
                     cars = td.get(id);
                 }else{
-                    lan = "000000";
+                    lat = "000000";
                     lon = "000000";
                     details= "NO details to show";
 
@@ -83,12 +83,12 @@ public class InfoFragment extends Fragment {
                             Value += " Model: " + map.get(key);
                         } else if (key.equals("year")) {
                             Value += " Year: " + map.get(key);
-                        }else if (key.equals("lan")) {
-                            lan = key;
+                        }else if (key.equals("lat")) {
+                            lat = map.get(key);
                         }else if (key.equals("lon")) {
-                           lon = key;
+                           lon = map.get(key);
                         }else if (key.equals("details")) {
-                            details = key;
+                            details = map.get(key);
                         }
                     }
                     Final.add(Value);
@@ -105,7 +105,7 @@ public class InfoFragment extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                         Intent intent = new Intent(view.getContext(), FindActivity.class);
-                        intent.putExtra("lan", lan);
+                        intent.putExtra("lat", lat);
                         intent.putExtra("lon", lon);
                         intent.putExtra("details", details);
                         startActivity(intent);

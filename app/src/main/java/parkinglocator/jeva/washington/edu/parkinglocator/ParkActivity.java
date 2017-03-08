@@ -14,13 +14,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ParkActivity extends AppCompatActivity {
     private Location mLocation;
     private int carCount;
-
+    private String id;
+    private  int count = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,8 +63,6 @@ public class ParkActivity extends AppCompatActivity {
                     lon = 0.0;
                 }
 
-                
-                String id;
                 try {
                     id = getDeviceId(v.getContext());
                 }
@@ -78,18 +84,37 @@ public class ParkActivity extends AppCompatActivity {
         });
     }
 
-    public static void writeUserData(String userId, int car, String make, String model, String year,
+    public void writeUserData(final String userId, int car, String make, String model, String year,
                                      String color, String details, double lat, double lon){
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference user = database.getReference(userId);
+        final DatabaseReference databasePull = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference user = database.getReference(userId);
 
-        user.child("" +car).child("make").setValue(make);
-        user.child("" +car).child("model").setValue(model);
-        user.child("" +car).child("year").setValue(year);
-        user.child("" +car).child("color").setValue(color);
-        user.child("" +car).child("details").setValue(details);
-        user.child("" +car).child("lat").setValue("" + lat);
-        user.child("" +car).child("lon").setValue("" + lon);
+        databasePull.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, ArrayList<Map<String, String>>> td = (HashMap<String,ArrayList<Map<String, String>>>) dataSnapshot.getValue();
+                ArrayList<Map<String, String>> cars = new ArrayList<Map<String, String>>();
+                cars = td.get(userId);
+
+                for (Map<String, String> map : cars) {
+                   count++;
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+            }
+
+            });
+
+        user.child("" +count).child("make").setValue(make);
+        user.child("" +count).child("model").setValue(model);
+        user.child("" +count).child("year").setValue(year);
+        user.child("" +count).child("color").setValue(color);
+        user.child("" +count).child("details").setValue(details);
+        user.child("" +count).child("lat").setValue("" + lat);
+        user.child("" +count).child("lon").setValue("" + lon);
 
     }
 

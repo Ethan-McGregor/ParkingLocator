@@ -1,34 +1,20 @@
 package parkinglocator.jeva.washington.edu.parkinglocator;
 
 
-import android.*;
-import android.Manifest;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.Settings.Secure;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,7 +22,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,8 +43,41 @@ public class InfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_info, container, false);
-        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
+        Button btn = (Button) view.findViewById(R.id.button4);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                refresh();
+            }});
+       refresh();
+
+        return view;
+    }
+
+    private class CarViewHolder
+            extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+
+        private CarViewHolder(View v) {
+            super(v);
+            v.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(v.getContext(), FindActivity.class);
+            CarObject temp = FINALCARLIST.get(getAdapterPosition());
+
+            intent.putExtra("lat", temp.getLat());
+            intent.putExtra("lon", temp.getLon());
+            intent.putExtra("details", temp.getDetails());
+            startActivity(intent);
+        }
+    }
+    public  void refresh(){
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         database.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
@@ -146,27 +164,6 @@ public class InfoFragment extends Fragment {
                 // Failed to read value
             }
         });
-        return view;
     }
 
-    private class CarViewHolder
-            extends RecyclerView.ViewHolder
-            implements View.OnClickListener {
-
-        private CarViewHolder(View v) {
-            super(v);
-            v.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(v.getContext(), FindActivity.class);
-            CarObject temp = FINALCARLIST.get(getAdapterPosition());
-
-            intent.putExtra("lat", temp.getLat());
-            intent.putExtra("lon", temp.getLon());
-            intent.putExtra("details", temp.getDetails());
-            startActivity(intent);
-        }
-    }
 }
